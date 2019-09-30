@@ -2,21 +2,22 @@
 import numpy as np
 import scipy.sparse as sp
 
+# initializing values:
 N = int(eval(input("Number of grid points: ")))
-rho = np.linspace(0, 1, N)
+rho = np.linspace(0, 1, N)  # step-variable.
 
-h = (rho[-1]-rho[0])/N
-a = -1/h**2
-d = 2/h**2
+h = (rho[-1]-rho[0])/N  # step size.
+a = -1/h**2  # off-diagonal elements.
+d = 2/h**2  # diagonal elements.
 
 
 def main():
     """This program finds the eigenvalues of a NxN Toeplitz matrix,
     and compares them with the analytical values."""
-    A = tri_matrix()
-    eigvals = np.sort(np_eigvals(A)[0])
-    an_egivals = np.sort(anal_eig())
-    test_eigvals(eigvals, an_egivals)
+    A = tri_matrix()  # creating matrix.
+    eigvals = np.sort(np_eigvals(A)[0])  # retrieving numerical eigenvalues.
+    an_egivals = np.sort(anal_eig())  # retrieving analytical eigenvalues.
+    test_eigvals(eigvals, an_egivals)  # testing eigenvalue correspondance.
     print(eigvals)
     print(an_egivals)
 
@@ -43,9 +44,12 @@ def anal_eig():
 
 
 def test_eigvals(num, an):
+    """Testing if NumPy eigenvalues matches analytical eigenvalues
+    within the set tolerance."""
     tol = 1e-10
     err = np.max(np.abs(num-an))
-    assert tol > err, "Analytical and NumPy eigvals don't match, error = %e" % err
+    msg = "Analytical and NumPy eigvals don't match, error = %e" % err
+    assert tol > err, msg
 
 
 if __name__ == '__main__':
