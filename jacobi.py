@@ -75,3 +75,13 @@ def find_max(A, akl, N):
 
 if __name__ == '__main__':
     main()
+
+# example run:
+"""
+$ python3 jacobi.py
+Number of grid points: 3
+[[ 1.80000000e+01  0.00000000e+00 -3.29270630e-20]
+ [ 0.00000000e+00  3.07279221e+01 -2.67543178e-12]
+ [-3.29270630e-20 -2.67543178e-12  5.27207794e+00]]
+"""
+# the diagonalized matrix is printed.
