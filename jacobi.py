@@ -8,8 +8,12 @@ tol = 1e-10
 def main():
     """Program uses Jacobi's rotation algorithm to diagonalize a tridiagonal,
     Toeplitz matrix."""
-    A = pro.tri_matrix()
-    N = len(A[0, :])
+    global N
+    N = int(eval(input("Number of grid points: ")))
+    h = 1/N
+    d = 2/h**2
+    e = -1/h**2
+    A = pro.tri_matrix(d, e, N)
     mask = np.ones(A.shape, dtype=bool)
     np.fill_diagonal(mask, 0)
 
