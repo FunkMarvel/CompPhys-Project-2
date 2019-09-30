@@ -10,17 +10,19 @@ def main():
     Toeplitz matrix."""
     global N
     N = int(eval(input("Number of grid points: ")))
-    h = 1/N
-    d = 2/h**2
-    e = -1/h**2
-    A = pro.tri_matrix(d, e, N)
-    mask = np.ones(A.shape, dtype=bool)
+    h = 1/N  # step-size.
+    d = 2/h**2  # diagonal elements.
+    e = -1/h**2  # off-diagonal elements.
+    A = pro.tri_matrix(d, e, N)  # constructing matrix.
+    mask = np.ones(A.shape, dtype=bool)  # creating mask to conceal diagonal.
     np.fill_diagonal(mask, 0)
 
-    a = np.linalg.norm(A[mask])
+    a = np.linalg.norm(A[mask])  # norm of non-diagonal elements.
+    # initial indices for rotational elements:
     k = N-1
     l = N-2
-    A = jacobi(A, mask, a, k, l, N)
+
+    A = jacobi(A, mask, a, k, l, N)  # solving eigenvalues.
     print(A)
 
 
