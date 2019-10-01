@@ -8,7 +8,7 @@ def main():
     """Using jacobi's algorithm to estimate the eigenvalues
     of the Hamiltonian for a one-electron system with a HO-potential."""
     N = int(eval(input("Number of grid points: ")))
-    rho_max = 12.5  # setting max value for position.
+    rho_max = 12.5  # 6.25  # setting max value for position.
     rho = np.linspace(0, rho_max, N)  # step-variable.
 
     h = (rho[-1]-rho[0])/N  # step size.
