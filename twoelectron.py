@@ -9,11 +9,11 @@ def main():
     of the Hamiltonian for a non-interacting,
     two-electron system with a HO-potential."""
     N = int(eval(input("Number of grid points: ")))
-    rho_max = 12.5
+    rho_max = 15.794
     rho = np.linspace(0, rho_max, N)  # step-variable.
 
     h = (rho[-1]-rho[0])/N  # step size.
-    omega_r = 0.25  # 0.001  # 0.5  # 1.0
+    omega_r = int(eval(input("Omega_r: ")))
     e = -1/h**2  # off-diagonal elements.
     d = 2/h**2 + (omega_r**2)*rho[1:-1]**2 + 1/rho[1:-1]  # diagonal elements.
     # creating matrix:
@@ -25,9 +25,17 @@ def main():
     a = np.linalg.norm(A[mask])  # norm of non-diagonal elements.
 
     A = jac.jacobi(A, mask, a, N-2)  # finding eigenvalues.
-    print(np.sort(np.diag(A))[:4]*0.5)  # printing eigenvalues.
+    print(np.sort(np.diag(A))[0])  # printing lowest eigenvalue.
     # print(np.sort(np.linalg.eig(A)[0])[:4])
 
 
 if __name__ == '__main__':
     main()
+
+# example run:
+"""
+$ python3 twoelectron.py
+Number of grid points: 100
+Omega_r: 1
+4.075455544319714
+"""

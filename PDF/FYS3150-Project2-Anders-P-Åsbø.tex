@@ -147,14 +147,24 @@
 \noaffiliation                            % ignore this
 
 \begin{abstract}
-The focus of this paper was the specific
+This paper focused on the implementation, and application of Jacobi's rotational algorithm to find the eigenvalues of Tridiagonal matrices numerically. The physical problems considered were a buckeling beam, and both a single electron and two electrons trapped in a harmonic oscillator potential.
+
+The goal is to evaluate the usability of the implementation, and look at possible improvements that can be made in future implementations of Jacobi's rotational algorithm.
+
+The implementation of \hyperref[subsec:32]{Jacobi's algorithm} looked at in this paper, was able to calulate the eigenvalues of the \hyperref[subsec:21]{buckling beam} problem with high accuracy (\hyperref[tab:421]{table II}), but could only reproduce the eigenvalues of the \hyperref[subsec:23]{single-electron} problem within \(2\) leading decimals.
+
+I was able to reproduce one of the results from Taut, M. (1993)\citep{PhysRevA.48.3561}. However, the reliability of this result is suspect at best.
+
+Overall, my implementation of \hyperref[subsec:32]{Jacobi's algorithm} is not particularly resource efficient. There are several improvements that can be made in future implementations. It can be used somewhat reliably for problems with a finite maximum variable, for \(N \leq 200\), but require to be run on better hardware to allow higher \(N\) when necessary.
 \end{abstract}
 
 \maketitle
 \tableofcontents
 
 \section{Introduction}\label{sec:1}
-The focus of this paper was the implementation, and application of Jacobi's rotational algorithm to find the eigenvalues of Tridiagonal matrices numerically. Reliably finding eigenvalues is a crucial part of many scientific and mathematical disciplines. In this paper I considered the quantum mechanical application of electrons trapped in a harmonic oscillator potential.
+The focus of this paper was the implementation, and application of Jacobi's rotational algorithm to find the eigenvalues of Tridiagonal matrices numerically. Reliably finding eigenvalues is a crucial part of many scientific and mathematical disciplines. The physical problems considered were a buckeling beam, and both a single electron and two electrons trapped in a harmonic oscillator potential.
+
+The goal is to evaluate the usability of the implementation, and look at possible improvements that can be made in future implementations of Jacobi's rotational algorithm.
 
 \section{Formalism}\label{sec:2}
 \subsection{The buckling beam problem}\label{subsec:21}
@@ -233,7 +243,7 @@ $$
 \citep{Hjorth-Jensen2019}.
 
 \subsection{Eigenvalues of a one-electron Hamiltonian}\label{subsec:23}
-To test the implimentation of Jacobi's algorithm, as outlined in \autoref{subsec:22}, a quantum mechanical system consisting of an electron trapped in a radialy symetric harmonic oscillator potential \(V(r)=\frac{1}{2}mkr^{2}\) was chosen as a test case.
+To test the implementation of Jacobi's algorithm, as outlined in \autoref{subsec:22}, a quantum mechanical system consisting of an electron trapped in a radialy symetric harmonic oscillator potential \(V(r)=\frac{1}{2}mkr^{2}\) was chosen as a test case.
 the corresponding radial equation is
 $$
 	-\frac{\hbar^{2}}{2m}\left(\frac{1}{r^{2}}\frac{d}{dr}r^{2}\frac{d}{dr}-\frac{l\left(l+1\right)}{r^{2}}\right)R(r)+V(r)R(r)=ER(r),
@@ -311,7 +321,7 @@ The step-size, and matrix elements are calculated, and the matrix is created, as
 Finally, the program prints the eigenvalues, as well as their relative errors.
 
 \subsection{Implementing the two-electron problem}\label{subsec:34}
-The implimentation of the problem outlined in \autoref{subsec:24} is almost identical to the implementation in \autoref{subsec:33}, and can be found in \hyperref[A:4]{"twoelectron.py"}. The difference is in the diagonal elements of \(A\), and that \hyperref[A:4]{"twoelectron.py"} does not calculate the relative error of the eigenvalues.
+The implementation of the problem outlined in \autoref{subsec:24} is almost identical to the implementation in \autoref{subsec:33}, and can be found in \hyperref[A:4]{"twoelectron.py"}. The difference is in the diagonal elements of \(A\), and that \hyperref[A:4]{"twoelectron.py"} does not calculate the relative error of the eigenvalues.
 
 \section{Analysis}\label{sec:4}
 \subsection{Results from testing the NumPy solver on the buckeling beam problem}\label{subsec:41}
@@ -409,11 +419,40 @@ The implimentation of the problem outlined in \autoref{subsec:24} is almost iden
 By comparing \hyperref[tab:431]{table III}, \hyperref[tab:432]{table IV}, \hyperref[tab:433]{table V}, and \hyperref[tab:434]{table VI}, it appears that adjusting \(N\) has the most noticable effect on the accuracy of the \hyperref[A:2]{jacobi.py} solver. I was unable to push the accuracy further, due to the limited single-core performance of the hardware that was used.
 
 \subsection{Results of the single-electron problem with Jacobi's algorithm}\label{subsec:44}
+\begin{table}[H]
+	\label{tab:441}
+	\centering
+	\begin{tabular}{|c|c|}
+	Numerical eigenvalue & \(\omega_{r}\) \\
+	\(0.16645674\)	& \(0.01\) \\
+	\(1.2501149\) & \(0.25\) \\
+	\(0.16645674\) & \(0.5\) \\
+	\(4.07545554\) & \(1.0\) \\
+	\end{tabular}
+	\caption{Numerical eigenvalues of the Hamiltonian for
+	the two-electron problem, using the \hyperref[A:2]{jacobi.py} solver. \(N=100\),
+	\(\rho_{N}=15.794\)}
+\end{table}
+\hyperref[tab:441]{Table VII} shows the lowest eigenvalues of the two-electron problem outlined in \autoref{subsec:24} calculated using the \hyperref[A:2]{jacobi.py} solver. The values of \(N\), and \(\rho_{N}\) was chosen by trying to make the value for \(\omega_{r}=0.25\) match the value of \(0.5\lambda=0.625\) found by Taut, M. (1993) (see Table I for \(n=4\) in \citep{PhysRevA.48.3561}), which is not the lowest eigenvalue. However, this was not a reliable way of adjusting parameters, as a slight nudge gave significantly different results. Perhaps if the implementation of Jacobi's algorithm was better optimized, and/or the hardware running the calculation was better, I could have achieved more reliable results.
 
+The remaining values in \hyperref[tab:441]{table VII} shows the lowest eigenvalue, and presumably the ground state energy.
+
+\subsection{Discussion of implementation}\label{subsec:45}
+Overall, my implementation of \hyperref[subsec:32]{Jacobi's algorithm} is not particularly resource efficient. Possible improvements include looking for terms, and factors that can be precalculated to reduce the number of FLOPS, as well as other possible ways to store the matrix than as a \(2D\)-NumPy array, seeing as this stores a lot of \(0\)-elements in memory that will never be used in calculations.
+
+Furthermore, rewriting the jacobi function to make it compatible with the Numba jit-compiler's nopyhton-mode, so as to take full advantae of the jit-compiler. Alternativly, implimenting the algorithm in a lower-level programming language than Python 3.6, such as c++, would likely speed up the calculations. I would also look at the way the step-size is implemented, as I am unsure if I have understood the definition correctly.
+
+Overall, the implementation seems usable for problems that have a finite max value for their function variable \(\rho_{N}\). While implimentations that require a sufficently large \(\rho_{N}\approx\infty\), would require hardware with better computing recourses, such that a matching sufficiently large \(N\) can be used. Otherwise it is hard to get reliable results with high accuracy.
 
 \section{Conclusion}\label{sec:5}
+The implementation of \hyperref[subsec:32]{Jacobi's algorithm} looked at in this paper, was able to calulate the eigenvalues of the \hyperref[subsec:21]{buckling beam} problem with high accuracy as seen in \hyperref[tab:421]{table II}, but could only reproduce the eigenvalues of the \hyperref[subsec:23]{single-electron} problem within \(2\) leading decimals.
+
+Furthermore, the implementation could reproduce one of the results from Taut, M. (1993)\citep{PhysRevA.48.3561} to \(3\) leading decimals. However, the reliability of this result is suspect at best.
+
+Overall, my implementation of \hyperref[subsec:32]{Jacobi's algorithm} is not particularly resource efficient. There are several improvements that can be made in future implementations. The implementation discussed in this paper can be used somewhat reliably for problems with a finite maximum variable, for \(N \leq 200\), but require to be run on better hardware to allow higher \(N\) if the problem beeing solved requires the maximum variable to approximate infinity.
 
 \bibliography{kilder}{}
+
 \newpage
 \appendix
 \section{Program files} \label{A}
