@@ -23,7 +23,7 @@ def main():
     l = N-2
 
     A = jacobi(A, mask, a, k, l, N)  # solving eigenvalues.
-    print(A)
+    print(np.sort(np.diag(A)))
 
 
 def jacobi(A, mask, a, k, l, N):
@@ -56,11 +56,11 @@ def jacobi(A, mask, a, k, l, N):
                 A[i, l] = ail*c + aik*s
                 A[l, i] = A[i, l]
 
-        # calculating diagonal elements, and setting rotational elements to 0.
+        # calculating diagonal and rotational elements:
         A[k, k] = akk*c**2-2*akl*c*s+all*s**2
         A[l, l] = all*c**2+2*akl*c*s+akk*s**2
-        A[k, l] = 0
-        A[l, k] = 0
+        A[k, l] = (akk-all)*c*s+akl*(c**2-s**2)
+        A[l, k] = -A[k, l]
 
         a = np.linalg.norm(A[mask])  # calculating norm of non-diagonal elements.
         loops += 1  # counting loop.

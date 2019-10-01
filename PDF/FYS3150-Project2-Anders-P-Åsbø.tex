@@ -157,6 +157,66 @@ The focus of this paper was the specific
 The focus of this paper was the implementation, and application of Jacobi's rotational algorithm to find the eigenvalues of Tridiagonal matrices numerically. Reliably finding eigenvalues is a crucial part of many scientific and mathematical disciplines. In this paper I considered the quantum mechanical application of electrons trapped in a harmonic oscillator potential.
 
 \section{Formalism}\label{sec:2}
+\subsection{The buckling beam problem}\label{subsec:21}
+The pretense for implementing Jacobi's algorithm is the classical problem of a beam of length \(L\) fastened in both ends \(x_{0} = 0\), \(x_{L} = L\). The beam is allowed to be displaced in the \(y\)-direction with displacement \(u(x)\), while \(u(0)=u(L)=0\). The displacement is driven by a force \(F\) at \((L,0)\) towards the origin. The displacement is then described by
+$$
+	\gamma \frac{d^{2}u(x)}{dx^{2}}=-Fu(x),
+$$
+where \(\gamma\) is a constant dependent on the physical properties of the beam\citep{DepartmentofPhysics2019}.
+
+By scaling the differential equation with \(\rho = \frac{x}{L}\), such that \(\rho \in [0,1]\), and introducing the parameter \(\lambda = FL^{2}/\gamma\)\citep{DepartmentofPhysics2019}, the differential equation becomes
+$$
+	\frac{d^{2}u(\rho)}{d\rho^{2}}=-\lambda u(\rho).
+$$
+
+Finally, the equation can be discretized with
+$$
+	u'' \approx \frac{u(\rho+h)-2u(\rho)+u(\rho-h)}{h^{2}},
+$$
+where \(h = \frac{\rho_{N}-\rho_{0}}{N}\) with \(N\) steps\citep{DepartmentofPhysics2019}. The resulting discretization becomes
+$$
+	-\frac{1}{h^{2}}u_{i+1}+
+	\frac{2}{h^{2}}u_{i}-\frac{1}{h^{2}}u_{i-1}=\lambda u_{i},
+$$
+which can be written as the matrix equation
+$$
+	A\vec{u}=\lambda\vec{u},
+$$
+where \(A\) is an \((N-2)\times (N-2)\) tridiagonal Toeplitz matrix with the diagonal elements \(d=2/h^{2}\), and upper and lower diagonals with elements \(a=-1/h^{2}\). This matrix happens to have analytical eigenvalues
+$$
+	\lambda_{j}=d+2a\cos\left(\frac{j\pi}{N+1}\right),
+$$
+where \(j=1,2,...,N\)\citep{DepartmentofPhysics2019}.
+
+\subsection{The Jacobi rotational algorithm}
+The goal of the Jacobi rotational algorithm is to reduce a matrix \(A\) to a diagonal matrix \(B\) where the elements along the diagonal are the eigenvalues \(\lambda_{i}\) of \(A\). This is usually done by finding a matrix \(S\) such that
+$$
+	B = S^{T}AS,
+$$
+and \(S^{T}=S^{-1}\)\citep{Hjorth-Jensen2019}. The Jacobi algorithm achieves this by choosing the elements of \(S\) to be equal to the coresponding identity matrix, except for the elements \(s_{kk},s_{ll}=\cos\theta\) and \(s_{kl} = \pm \sin\theta\), \(s_{lk} = -s_{kl}\)\citep{Hjorth-Jensen2019}, and applying the \(B = S^{T}AS\) transformation repeatedly, until the non-diagonal elements of \(B\) are sufficiently close to zero. Doing this we get a system of equations for the various elements of the resulting matrix \(B\)
+$$
+	b_{ii}=a_{ii} i\neq k, i\neq l,
+$$
+$$
+	b_{ik}=a_{ik}c-a_{il}s, i\neq k, i\neq l,
+$$
+$$
+	b_{il}=a_{il}c+a_{ik}s, i\neq k, i\neq l,
+$$
+$$
+	b_{kk}=a_{kk}c^{2}-2a_{kl}cs-a_{ll}s^{2},
+$$
+$$
+	b_{ll}=a_{ll}c^{2}-2a_{kl}cs-a_{kk}s^{2},
+$$
+$$
+	b_{kl}=\left(a_{kk}-a_{ll}\right)cs-a_{kl}\left(c^{2}-s^{2}\right),
+$$
+$$
+	b_{lk}=-b_{kl},
+$$
+where \(c = \cos\theta\), \(s = \sin\theta\), and \(k,l\) are chosen such that \(a_{kl}\) is the non-diagonal element in \(A\) with the largest absolute value.
+
 
 \section{Implementation}\label{sec:3}
 
