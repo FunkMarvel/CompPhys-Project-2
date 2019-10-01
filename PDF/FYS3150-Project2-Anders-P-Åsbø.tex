@@ -188,7 +188,7 @@ $$
 $$
 where \(j=1,2,...,N\)\citep{DepartmentofPhysics2019}.
 
-\subsection{The Jacobi rotational algorithm}
+\subsection{The Jacobi rotational algorithm}\label{subsec:22}
 The goal of the Jacobi rotational algorithm is to reduce a matrix \(A\) to a diagonal matrix \(B\) where the elements along the diagonal are the eigenvalues \(\lambda_{i}\) of \(A\). This is usually done by finding a matrix \(S\) such that
 $$
 	B = S^{T}AS,
@@ -217,8 +217,29 @@ $$
 $$
 where \(c = \cos\theta\), \(s = \sin\theta\), and \(k,l\) are chosen such that \(a_{kl}\) is the non-diagonal element in \(A\) with the largest absolute value.
 
+To chose an rotational angle \(\theta\), the quantities \(\tan\theta=t=s/c\) are defined such that
+$$
+	\cot 2\theta = \tau = \frac{a_{ll}-a_{kk}}{2a_{kl}},
+$$
+$$
+	t = -\tau \pm \sqrt{1+\tau^{2}},
+$$
+$$
+	c = \frac{1}{\sqrt{1+t^{2}}},
+$$
+$$
+	s = ct,
+$$
+\citep{Hjorth-Jensen2019}.
+
+\subsection{Eigenvalues of a one-electron Hamiltonian}\label{subsec:23}
 
 \section{Implementation}\label{sec:3}
+\subsection{Constructing the matrix and testing agianst the NumPy solver}\label{subsec:31}
+As a prequel to implementing the jacobi algorithm, \hyperref[A:1]{"program.py"} was written to construct the tridiagonal Toeplitz matrix, and find its eigenvalues using the numpy.linalg.eig() method provided by the NumPy package. \hyperref[A:1]{"program.py"} also includes a test comparing the numerically found eigenvalues with the expected results from the analytical expression in \autoref{subsec:22}, with a tolerance of \(10^{-10}\).
+
+\subsection{Implementing Jacobi's rotational algorithm}\label{subsec:32}
+Jacobi's algorithm was implemented in \hyperref[A:2]{"jacobi.py"}
 
 \section{Analysis}\label{sec:4}
 
@@ -230,11 +251,11 @@ where \(c = \cos\theta\), \(s = \sin\theta\), and \(k,l\) are chosen such that \
 \section{Program files} \label{A}
 All code for this report was written in Python 3.6, and the complete set of program files can be found at \url{https://github.com/FunkMarvel/CompPhys-Project-2}.
 
-\subsection{project.py}\label{A:1}
-\url{https://github.com/FunkMarvel/CompPhys-Project-1/blob/master/project.py}
+\subsection{program.py}\label{A:1}
+\url{https://github.com/FunkMarvel/CompPhys-Project-2/blob/master/program.py}
 
-\subsection{project\_specialized.py}\label{A:2}
-\url{https://github.com/FunkMarvel/CompPhys-Project-1/blob/master/project_specialized.py}
+\subsection{jacobi.py}\label{A:2}
+\url{https://github.com/FunkMarvel/CompPhys-Project-2/blob/master/jacobi.py}
 
 \subsection{data\_generator.py} \label{A:3}
 \url{https://github.com/FunkMarvel/CompPhys-Project-1/blob/master/data_generator.py}

@@ -1,5 +1,6 @@
 # Project 2 FYS3150, Anders P. Åsbø
 import numpy as np
+from numba import jit
 import program as pro
 
 tol = 1e-20
@@ -26,6 +27,7 @@ def main():
     print(np.sort(np.diag(A)))
 
 
+@jit
 def jacobi(A, mask, a, k, l, N):
     """Function that diagonalizes a matrix using
     Jacobi's rotation algorithm."""
@@ -68,6 +70,7 @@ def jacobi(A, mask, a, k, l, N):
     return A  # returning diagonalized matrix.
 
 
+@jit
 def find_max(A, akl, N):
     """Function for finding the non-diagonal element with
     largest absolute value."""
