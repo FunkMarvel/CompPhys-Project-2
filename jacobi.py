@@ -2,7 +2,7 @@
 import numpy as np
 import program as pro
 
-tol = 1e-10
+tol = 1e-20
 
 
 def main():
