@@ -5,6 +5,8 @@ import scipy.sparse as sp
 
 
 def main():
+    """Using jacobi's algorithm to estimate the eigenvalues
+    of the Hamiltonian for a one-electron system with a HO-potential."""
     N = int(eval(input("Number of grid points: ")))
     rho_max = 12.5
     rho = np.linspace(0, rho_max, N)  # step-variable.
@@ -23,10 +25,17 @@ def main():
     k = N-1
     l = N-2
 
-    A = jac.jacobi(A, mask, a, k, l, N-2)
-    print(np.sort(np.diag(A))[:4])
+    A = jac.jacobi(A, mask, a, k, l, N-2)  # diagonalizing matrix.
+    print(np.sort(np.diag(A))[:4])  # printing first 4 eigenvalues.
     # print(np.sort(np.linalg.eig(A)[0])[:4])
 
 
 if __name__ == '__main__':
     main()
+
+# example run:
+"""
+$ python3 oneelectron.py
+Number of grid points: 100
+[ 3.02531219  7.04570702 11.04999135 15.03806645]
+"""

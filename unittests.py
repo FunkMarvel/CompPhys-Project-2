@@ -5,9 +5,12 @@ import jacobi as jac
 
 
 def main():
+    """Testing the accuracy of the implemented jacobi algorithm in
+    jacobi.py, and the find_max functions ability to find the maximum
+    non-diagonal element."""
     test_find_max_diagonal()
 
-    global N
+    global N  # setting parameters:
     N = int(eval(input("Number of grid points: ")))
     h = 1/N
     d = 2/h**2
