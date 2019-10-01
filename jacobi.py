@@ -19,16 +19,13 @@ def main():
     np.fill_diagonal(mask, 0)
 
     a = np.linalg.norm(A[mask])  # norm of non-diagonal elements.
-    # initial indices for rotational elements:
-    k = N-1
-    l = N-2
 
-    A = jacobi(A, mask, a, k, l, N)  # solving eigenvalues.
+    A = jacobi(A, mask, a, N)  # solving eigenvalues.
     print(np.sort(np.diag(A)))
 
 
 @jit
-def jacobi(A, mask, a, k, l, N):
+def jacobi(A, mask, a, N):
     """Function that diagonalizes a matrix using
     Jacobi's rotation algorithm."""
     loops = 0  # counting number of loops
@@ -64,7 +61,8 @@ def jacobi(A, mask, a, k, l, N):
         A[k, l] = (akk-all)*c*s+akl*(c**2-s**2)
         A[l, k] = -A[k, l]
 
-        a = np.linalg.norm(A[mask])  # calculating norm of non-diagonal elements.
+        # calculating norm of non-diagonal elements:
+        a = np.linalg.norm(A[mask])
         loops += 1  # counting loop.
 
     return A  # returning diagonalized matrix.
@@ -88,9 +86,8 @@ if __name__ == '__main__':
 # example run:
 """
 $ python3 jacobi.py
+$ python3 jacobi.py
 Number of grid points: 3
-[[ 1.80000000e+01  0.00000000e+00 -3.29270630e-20]
- [ 0.00000000e+00  3.07279221e+01 -2.67543178e-12]
- [-3.29270630e-20 -2.67543178e-12  5.27207794e+00]]
+[ 5.27207794 18.         30.72792206]
 """
-# the diagonalized matrix is printed.
+# the numerical eigenvalues are printed.

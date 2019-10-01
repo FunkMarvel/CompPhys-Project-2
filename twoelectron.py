@@ -23,12 +23,9 @@ def main():
     np.fill_diagonal(mask, 0)
 
     a = np.linalg.norm(A[mask])  # norm of non-diagonal elements.
-    # initial indices for rotational elements:
-    k = N-1
-    l = N-2
 
-    A = jac.jacobi(A, mask, a, k, l, N-2)
-    print(np.sort(np.diag(A))[:4]*0.5)
+    A = jac.jacobi(A, mask, a, N-2)  # finding eigenvalues.
+    print(np.sort(np.diag(A))[:4]*0.5)  # printing eigenvalues.
     # print(np.sort(np.linalg.eig(A)[0])[:4])
 
 
