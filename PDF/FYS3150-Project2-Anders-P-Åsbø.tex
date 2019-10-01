@@ -17,7 +17,7 @@
 \usepackage{listings}         % display code
 \usepackage{subfigure}        % imports a lot of cool and useful figure commands
 \usepackage{lipsum}
-
+\usepackage{datetime}
 \usepackage{lmodern}
 
 % (2) specify encoding
@@ -143,7 +143,9 @@
 \begin{document}
 \title{Calculating eigenvalues using Jacobi's rotational algorithm}   % self-explanatory
 \author{Anders P. Åsbø}               % self-explanatory
-\date{\today}
+
+\newdate{date}{30}{09}{2019}
+\date{\displaydate{date}}
 \noaffiliation                            % ignore this
 
 \begin{abstract}
