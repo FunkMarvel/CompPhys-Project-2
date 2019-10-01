@@ -17,9 +17,10 @@ def main():
     A = tri_matrix(d, a, N)  # creating matrix.
     eigvals = np.sort(np_eigvals(A)[0])  # numerical eigenvalues.
     an_egivals = np.sort(anal_eig(d, a, N))  # analytical eigenvalues.
-    test_eigvals(eigvals, an_egivals)  # testing eigenvalue correspondance.
     print(eigvals)
     print(an_egivals)
+
+    test_eigvals(eigvals, an_egivals)  # testing eigenvalue correspondance.
 
 
 def tri_matrix(d, a, N):

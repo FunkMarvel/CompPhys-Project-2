@@ -303,12 +303,66 @@ Finally, the numerical eigenvalues are extracted, sorted and printed to the term
 
 The program files also includes \hyperref[A:5]{"unittest.py"}, which tests the corespondence between the numerical eigenvalues found using the jacobi function on the tridiagonal matrix from \autoref{subsec:21}, and the analytical eigenvalues, with a tolerance of \(10^{-10}\). A second unit test in \hyperref[A:5]{"unittest.py"} tests if the find\_max function is able to always pick out the element with the largest absolute value in a randomized \(5\times5\)-matrix.
 
-\subsection{Implementing the single-electron problem}
-To solve the eigenvalues of the problem outlined in \autoref{subsec:23}, \hyperref[A:3]{"oneelectron.py"} was written. The program takes in the number of grid points. Ten it sets the maximum value \(\rho_{N}\approx\infty\) of \(\rho\), which after trial and error was determined to be \(12.5\), with the computational resources I had available. The step-size, and matrix elements are calculated, and the matrix created, as well as a mask that conceals the diagonal when evaluating the norm of \(A\). The matrix is diagonalized, and the eigenvalues are retrieved.
+\subsection{Implementing the single-electron problem}\label{subsec:33}
+To solve the eigenvalues of the problem outlined in \autoref{subsec:23}, \hyperref[A:3]{"oneelectron.py"} was written. The program takes in the number of grid points. Ten it sets the maximum value \(\rho_{N}\approx\infty\) of \(\rho\), which after trial and error was determined to be \(12.5\), with the computational resources I had available.
+
+The step-size, and matrix elements are calculated, and the matrix is created, as well as a mask that conceals the diagonal when evaluating the norm of \(A\). The matrix is diagonalized using the jacobi function from \hyperref[A:2]{"jacobi.py"}, and the eigenvalues are retrieved.
+
+Finally, the program prints the eigenvalues, as well as their relative errors.
+
+\subsection{Implementing the two-electron problem}\label{subsec:34}
+The implimentation of the problem outlined in \autoref{subsec:24} is almost identical to the implementation in \autoref{subsec:33}, and can be found in \hyperref[A:4]{"twoelectron.py"}. The difference is in the diagonal elements of \(A\), and that \hyperref[A:4]{"twoelectron.py"} does not calculate the relative error of the eigenvalues.
 
 \section{Analysis}\label{sec:4}
+\subsection{Results from testing the NumPy solver on the buckeling beam problem}\label{subsec:41}
+\begin{table}[H]
+	\label{tab:411}
+	\centering
+	\begin{tabular}{|c|c|}
+	Numerical eigenvalue & Analytical eigenvalue \\
+	\(6.69872981\)	& \(6.69872981\) \\
+	\(25\) & \(25\) \\
+	\(50\) & \(50\) \\
+	\(75\) & \(75\) \\
+	\(93.30127019\) & \(93.30127019\) \\
+	\end{tabular}
+	\caption{Numerical and analytical eigenvalues of the tridiagonal Toeplitz matrix for
+	the buckling beam problem, using the NumPy solver. \(N=5\)}
+\end{table}
 
+\autoref{tab:411} shows the resulting numerical, and analytical eigenvalues of \hyperref[A:1]{"program.py"} being run with \(N=5\). The NumPy solver could handle up to and including \(N=79\), before exceeding the tolerance of \(10^{-10}\) with a maximum error of \(\SI{1.382432e-10}{}\). With \(N=10^{3}\), which was the highest tested, the maximum error was only \(\SI{4.097819e-08}{}\).
 
+\subsection{Results of implementing the buckling beam problem using Jacobi's algorithm}\label{subsec:42}
+\begin{table}[H]
+	\label{tab:421}
+	\centering
+	\begin{tabular}{|c|c|}
+	Numerical eigenvalue & Analytical eigenvalue \\
+	\(6.69872981\)	& \(6.69872981\) \\
+	\(25\) & \(25\) \\
+	\(50\) & \(50\) \\
+	\(75\) & \(75\) \\
+	\(93.30127019\) & \(93.30127019\) \\
+	\end{tabular}
+	\caption{Numerical and analytical eigenvalues of the tridiagonal Toeplitz matrix for
+	the buckling beam problem, using the \hyperref[A:2]{jacobi.py} solver. \(N=5\)}
+\end{table}
+\autoref{tab:411} shows the resulting numerical, and analytical eigenvalues of \hyperref[A:2]{"jacobi.py"} being run with \(N=5\). The \hyperref[A:2]{jacobi.py} solver could handle up to and including \(N=5\), before exceeding the tolerance of \(10^{-10}\) with a maximum error of \(\SI{1.145963e-10}{}\). With \(N=200\), which was the highest tested, the maximum error was \(\SI{5.587935e-09}{}\).
+
+\subsection{Results of the One-Electron problem with Jacobi's algorithm}
+\begin{table}[H]
+	\label{tab:421}
+	\centering
+	\begin{tabular}{|c|c|c|}
+	Numerical eigenvalue & Analytical eigenvalue & Relative error \\
+	\(3.01384183\)	& \(3\) & \(0.00461394\) \\
+	\(7.02900535\) & \(7\) & \(0.00414362\) \\
+	\(11.04021305\) & \(11\) & \(0.00365573\) \\
+	\(15.04745905\) & \(15\) & \(0.00316394\) \\
+	\end{tabular}
+	\caption{Numerical and analytical eigenvalues of the tridiagonal Toeplitz matrix for
+	the buckling beam problem, using the \hyperref[A:2]{jacobi.py} solver. \(N=200\)}
+\end{table}
 
 \section{Conclusion}\label{sec:5}
 

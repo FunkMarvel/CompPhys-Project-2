@@ -13,7 +13,7 @@ def main():
     rho = np.linspace(0, rho_max, N)  # step-variable.
 
     h = (rho[-1]-rho[0])/N  # step size.
-    omega_r = 0.25
+    omega_r = 0.25  # 0.001  # 0.5  # 1.0
     e = -1/h**2  # off-diagonal elements.
     d = 2/h**2 + (omega_r**2)*rho[1:-1]**2 + 1/rho[1:-1]  # diagonal elements.
     # creating matrix:
