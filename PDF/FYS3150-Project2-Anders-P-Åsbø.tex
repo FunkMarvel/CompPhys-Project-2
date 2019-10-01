@@ -255,6 +255,8 @@ $$
 $$
 with the requirement that \(u(0)=u(\infty)=0\)\citep{DepartmentofPhysics2019}. This can be written as a matrix equation where the matrix \(A\) is a tridiagonal matrix with \(d = \left(\frac{2}{h^{2}}+\rho^{2}\right)\) along the diagonal, and \(e = -\frac{1}{h^{2}}\) as the non-diagonal elements. The step-size \(h\) is as defined in \autoref{subsec:21}.
 
+This specific problem has the analytical eigenvalues \(\lambda = 3,7,11,15\)\citep{DepartmentofPhysics2019}.
+
 \subsection{Eigenvalues of a two-electron Hamiltonian}\label{subsec:24}
 The radial equation for a non-interacting electron pair, can be written as the product of two single-electron radial equations
 $$
@@ -269,7 +271,7 @@ $$
 	-\frac{d^{2}}{d\rho^{2}}\psi(\rho)+\omega_{r}^{2}\rho^{2}\psi(\rho)+\frac{1}{\rho}=
 	\lambda\psi(\rho),
 $$ 
-where \(\rho\) is the same dimensionless variable from \autoref{subsec:23}, the frequency \(\omega_{r}=\frac{1}{4}\frac{mk}{\hbar^{2}}\alpha^{4}\), \(\alpha\) is chosen such that
+where \(\rho\in[0,\infty)\) is the same dimensionless variable from \autoref{subsec:23}, the frequency \(\omega_{r}=\frac{1}{4}\frac{mk}{\hbar^{2}}\alpha^{4}\), \(\alpha\) is chosen such that
 \(\frac{m\alpha\beta e^{2}}{\hbar^{2}}=1\), and \(\lambda = \frac{m\alpha^{2}}{\hbar^{2}}E\)\citep{DepartmentofPhysics2019}.
 
 Doing the same discretization as in \autoref{subsec:21} and \autoref{subsec:23} results in the linear equations
@@ -299,8 +301,10 @@ The find\_max function in \hyperref[A:2]{"jacobi.py"} uses two nested for-loops 
 
 Finally, the numerical eigenvalues are extracted, sorted and printed to the terminal.
 
+The program files also includes \hyperref[A:5]{"unittest.py"}, which tests the corespondence between the numerical eigenvalues found using the jacobi function on the tridiagonal matrix from \autoref{subsec:21}, and the analytical eigenvalues, with a tolerance of \(10^{-10}\). A second unit test in \hyperref[A:5]{"unittest.py"} tests if the find\_max function is able to always pick out the element with the largest absolute value in a randomized \(5\times5\)-matrix.
+
 \subsection{Implementing the single-electron problem}
-To solve the eigenvalues of the problem outlined in \autoref{subsec:23}, \hyperref[A:3]{"oneelectron.py"} was written.
+To solve the eigenvalues of the problem outlined in \autoref{subsec:23}, \hyperref[A:3]{"oneelectron.py"} was written. The program takes in the number of grid points. Ten it sets the maximum value \(\rho_{N}\approx\infty\) of \(\rho\), which after trial and error was determined to be \(12.5\), with the computational resources I had available. The step-size, and matrix elements are calculated, and the matrix created, as well as a mask that conceals the diagonal when evaluating the norm of \(A\). The matrix is diagonalized, and the eigenvalues are retrieved.
 
 \section{Analysis}\label{sec:4}
 
@@ -320,14 +324,14 @@ All code for this report was written in Python 3.6, and the complete set of prog
 \subsection{jacobi.py}\label{A:2}
 \url{https://github.com/FunkMarvel/CompPhys-Project-2/blob/master/jacobi.py}
 
-\subsection{data\_generator.py} \label{A:3}
-\url{https://github.com/FunkMarvel/CompPhys-Project-1/blob/master/data_generator.py}
+\subsection{oneelectron.py} \label{A:3}
+\url{https://github.com/FunkMarvel/CompPhys-Project-2/blob/master/oneelectron.py}
 
-\subsection{erroranalysis.py} \label{A:4}
-\url{https://github.com/FunkMarvel/CompPhys-Project-1/blob/master/erroranlaysis.py}
+\subsection{twoelectron.py} \label{A:4}
+\url{https://github.com/FunkMarvel/CompPhys-Project-2/blob/master/twoelectron.py}
 
-\subsection{LUdecomp.py}\label{A:5}
-\url{https://github.com/FunkMarvel/CompPhys-Project-1/blob/master/LUdecomp.py}
+\subsection{unittest.py}\label{A:5}
+\url{https://github.com/FunkMarvel/CompPhys-Project-2/blob/master/unittests.py}
 
 
 \end{document}

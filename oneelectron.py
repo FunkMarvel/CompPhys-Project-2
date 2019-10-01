@@ -8,7 +8,7 @@ def main():
     """Using jacobi's algorithm to estimate the eigenvalues
     of the Hamiltonian for a one-electron system with a HO-potential."""
     N = int(eval(input("Number of grid points: ")))
-    rho_max = 12.5
+    rho_max = 12.5  # setting max value for position.
     rho = np.linspace(0, rho_max, N)  # step-variable.
 
     h = (rho[-1]-rho[0])/N  # step size.
@@ -23,8 +23,12 @@ def main():
     a = np.linalg.norm(A[mask])  # norm of non-diagonal elements.
 
     A = jac.jacobi(A, mask, a, N-2)  # diagonalizing matrix.
-    print(np.sort(np.diag(A))[:4])  # printing first 4 eigenvalues.
+    eigvals = np.sort(np.diag(A))[:4]
+    print(eigvals)  # printing first 4 eigenvalues.
     # print(np.sort(np.linalg.eig(A)[0])[:4])
+    anal_eigvals = np.array([3, 7, 11, 15])
+    error = abs((eigvals-anal_eigvals)/anal_eigvals)  # relative error.
+    print(error)
 
 
 if __name__ == '__main__':
